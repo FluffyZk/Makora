@@ -1,6 +1,7 @@
 # Makora
 
 **Autonomous Privacy-First DeFi Agent for Solana**
+**CA : F7ptYbyH4Sd8JS3kvRkdpYuz4tYxP53HQS2B1yYH6MKR**
 
 
 [![Twitter](https://img.shields.io/badge/Our-X-14F195?style=flat-square)](https://x.com/MakoraSolana)
