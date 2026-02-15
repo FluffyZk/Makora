@@ -1,0 +1,39 @@
+{
+  "name": "@makora/api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Makora REST API - Agent-to-Agent communication layer for Solana DeFi",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup src/index.ts --format esm --watch --onSuccess 'node dist/index.js'",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@makora/types": "workspace:*",
+    "@makora/agent-core": "workspace:*",
+    "@makora/data-feed": "workspace:*",
+    "@makora/execution-engine": "workspace:*",
+    "@makora/strategy-engine": "workspace:*",
+    "@makora/risk-manager": "workspace:*",
+    "@makora/protocol-router": "workspace:*",
+    "@makora/privacy": "workspace:*",
+    "@makora/adapters-jupiter": "workspace:*",
+    "@makora/adapters-marinade": "workspace:*",
+    "@makora/adapters-privacy": "workspace:*",
+    "@solana/web3.js": "^1.98.4",
+    "express": "^4.21.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.17",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.0",
+    "rimraf": "^5.0.0"
+  }
+}

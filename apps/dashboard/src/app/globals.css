@@ -1,0 +1,316 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-void: #050508;
+  --bg-card: #0a0a12;
+  --bg-inner: #08080e;
+  --cursed: #00E5FF;
+  --cursed-light: #67EFFF;
+  --cursed-dim: #00B4D8;
+  --shadow-purple: #00B4D8;
+  --text-primary: #f0edf5;
+  --text-secondary: #787580;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Cursed card - the core UI element */
+.cursed-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(0, 229, 255, 0.12);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cursed-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cursed), transparent);
+  opacity: 0.4;
+}
+
+.cursed-card:hover {
+  border-color: rgba(0, 229, 255, 0.25);
+}
+
+/* Violet gradient text */
+.text-cursed-gradient {
+  background: linear-gradient(135deg, var(--cursed-dim) 0%, var(--cursed) 40%, var(--cursed-light) 60%, var(--cursed) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Section headers - manga style */
+.section-title {
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: var(--cursed);
+  border-left: 2px solid var(--cursed);
+  padding-left: 0.75rem;
+}
+
+/* Ink-splash divider */
+.ink-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 229, 255, 0.3) 20%,
+    rgba(0, 229, 255, 0.5) 50%,
+    rgba(0, 229, 255, 0.3) 80%,
+    transparent 100%
+  );
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-void);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.3);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 229, 255, 0.5);
+}
+
+/* Range inputs */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  border-radius: 0;
+  outline: none;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: var(--cursed);
+  cursor: pointer;
+  border: 2px solid var(--bg-void);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: var(--cursed);
+  cursor: pointer;
+  border: 2px solid var(--bg-void);
+  border-radius: 0;
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+}
+
+/* Cursed energy bar animation */
+@keyframes energy-flow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.energy-bar {
+  background: linear-gradient(90deg,
+    var(--cursed-dim),
+    var(--cursed),
+    var(--cursed-light),
+    var(--cursed)
+  );
+  background-size: 200% 100%;
+  animation: energy-flow 3s linear infinite;
+}
+
+/* Kanji watermark */
+.kanji-watermark {
+  position: absolute;
+  font-size: 12rem;
+  font-weight: 900;
+  opacity: 0.015;
+  color: var(--cursed);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+
+/* ── Responsive font scale (mobile-first) ────────────────────────────── */
+@layer utilities {
+  /* Mobile: readable sizes → Desktop: compact dashboard sizes */
+  .text-ui-xs {
+    font-size: 0.6875rem; /* 11px mobile */
+    line-height: 1rem;
+  }
+  .text-ui-sm {
+    font-size: 0.75rem; /* 12px mobile */
+    line-height: 1.125rem;
+  }
+  .text-ui-base {
+    font-size: 0.8125rem; /* 13px mobile */
+    line-height: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .text-ui-xs {
+    font-size: 0.5625rem; /* 9px desktop */
+    line-height: 0.875rem;
+  }
+  .text-ui-sm {
+    font-size: 0.625rem; /* 10px desktop */
+    line-height: 1rem;
+  }
+  .text-ui-base {
+    font-size: 0.6875rem; /* 11px desktop */
+    line-height: 1.125rem;
+  }
+}
+
+/* Touch-friendly targets */
+@layer utilities {
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* ── TWA (Telegram Mini App) ─────────────────────────────────────────────── */
+
+/* Fallback page (Suspense loading) */
+.twa-page {
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overscroll-behavior: none;
+}
+
+/* Main app shell — fixed viewport, flex column */
+.twa-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Top status bar */
+.twa-statusbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(0, 229, 255, 0.08);
+  background: var(--bg-void);
+  z-index: 10;
+}
+
+/* Scrollable content area between status bar and tab bar */
+.twa-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Bottom tab bar */
+.twa-tabbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: var(--bg-void);
+  border-top: 1px solid rgba(0, 229, 255, 0.08);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 10;
+}
+
+/* Individual tab button */
+.twa-tab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex: 1;
+  padding: 8px 0;
+  min-height: 52px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Active tab indicator line */
+.twa-tab-indicator {
+  position: absolute;
+  top: 0;
+  left: 25%;
+  right: 25%;
+  height: 2px;
+  background: #00E5FF;
+  border-radius: 0 0 2px 2px;
+}
+
+/* TWA touch targets — enforce minimum 44px */
+.twa-app button,
+.twa-app a,
+.twa-app [role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* TWA single-column: override any desktop grid layouts */
+.twa-app .grid {
+  grid-template-columns: 1fr !important;
+}

@@ -1,0 +1,132 @@
+/**
+ * Inline keyboard builders for the Telegram bot.
+ */
+
+import { InlineKeyboard, Keyboard } from 'grammy';
+
+const DASHBOARD_URL = process.env.DASHBOARD_URL || 'https://solana-agent-hackathon-seven.vercel.app';
+
+// Module-level TWA URL — set once after initialization
+let _twaUrl = '';
+
+/**
+ * Call once after initialization to enable the Dashboard button
+ * in the persistent keyboard. With Privy auth, wallet is no longer
+ * needed in the URL — Privy handles wallet creation on login.
+ */
+export function initDashboardUrl(walletPubkey?: string): void {
+  _twaUrl = `${DASHBOARD_URL}/twa`;
+}
+
+/** Update the persistent keyboard TWA URL with a specific chatId */
+export function setTwaChatId(chatId: number): void {
+  _twaUrl = `${DASHBOARD_URL}/twa?chatId=${chatId}`;
+}
+
+/**
+ * Trade confirmation keyboard: Confirm / Cancel
+ */
+export function tradeConfirmKeyboard(actionId: string): InlineKeyboard {
+  return new InlineKeyboard()
+    .text('Confirm \u2713', `confirm:${actionId}`)
+    .text('Cancel \u2717', `cancel:${actionId}`);
+}
+
+/**
+ * OODA cycle approval keyboard (advisory mode)
+ */
+export function oodaApproveKeyboard(cycleId: string): InlineKeyboard {
+  return new InlineKeyboard()
+    .text('Approve All', `ooda:approve:${cycleId}`)
+    .text('Reject All', `ooda:reject:${cycleId}`);
+}
+
+/**
+ * Strategy selection keyboard
+ */
+export function strategySelectKeyboard(): InlineKeyboard {
+  return new InlineKeyboard()
+    .text('Conservative', 'strategy:conservative')
+    .text('Balanced', 'strategy:balanced')
+    .text('Aggressive', 'strategy:aggressive');
+}
+
+/**
+ * Trading mode selection keyboard
+ */
+export function tradingModeKeyboard(): InlineKeyboard {
+  return new InlineKeyboard()
+    .text('Perps', 'mode:perps')
+    .text('Invest', 'mode:invest');
+}
+
+/**
+ * Alerts toggle keyboard
+ */
+export function alertsKeyboard(currentlyEnabled: boolean): InlineKeyboard {
+  if (currentlyEnabled) {
+    return new InlineKeyboard().text('Disable Alerts', 'alerts:off');
+  }
+  return new InlineKeyboard().text('Enable Alerts', 'alerts:on');
+}
+
+/**
+ * Mini App (TWA) keyboard — opens dashboard inside Telegram (inline version)
+ */
+export function miniAppKeyboard(walletPubkey?: string, chatId?: number): InlineKeyboard {
+  const url = chatId ? `${DASHBOARD_URL}/twa?chatId=${chatId}` : `${DASHBOARD_URL}/twa`;
+  return new InlineKeyboard().webApp('\u{1F4F1} Open Dashboard', url);
+}
+
+/**
+ * Persistent reply keyboard — always visible at the bottom of the chat.
+ * Row 1: Core market actions
+ * Row 2: Trading actions
+ * Row 3: Dashboard (webApp) + Settings
+ *
+ * @param chatId - Optional per-user chatId to embed in the Dashboard URL.
+ *                 When provided, overrides the module-level _twaUrl for this keyboard instance.
+ */
+export function mainMenuKeyboard(chatId?: number): Keyboard {
+  const kb = new Keyboard()
+    .text('\u{1F4CA} Status').text('\u{1F4C8} Scan').text('\u{1F9E0} Sentiment').row()
+    .text('\u{1F4BC} Positions').text('\u{1F916} Auto').text('\u{1F3AF} Strategy').row()
+    .text('\u{1F4F0} News');
+
+  // Prefer per-user chatId URL, fall back to module-level _twaUrl
+  const dashUrl = chatId ? `${DASHBOARD_URL}/twa?chatId=${chatId}` : _twaUrl;
+  if (dashUrl) {
+    kb.webApp('\u{1F4F1} Dashboard', dashUrl);
+  }
+
+  kb.text('\u{2699}\uFE0F Settings');
+
+  return kb.resized().persistent();
+}
+
+/**
+ * Settings sub-menu inline keyboard
+ */
+export function settingsInlineKeyboard(alertsOn: boolean): InlineKeyboard {
+  return new InlineKeyboard()
+    .text(`Alerts: ${alertsOn ? 'ON' : 'OFF'}`, alertsOn ? 'alerts:off' : 'alerts:on')
+    .text('Trading Mode', 'settings:mode').row()
+    .text('Setup OpenAI', 'llm:openai')
+    .text('Setup Anthropic', 'llm:anthropic').row()
+    .text('Disable LLM', 'llm:off')
+    .text('Wallet', 'settings:wallet');
+}
+
+/**
+ * Auto mode inline keyboard
+ */
+export function autoModeKeyboard(isRunning: boolean): InlineKeyboard {
+  if (isRunning) {
+    return new InlineKeyboard()
+      .text('Run Cycle', 'auto:cycle')
+      .text('Stop', 'auto:off');
+  }
+  return new InlineKeyboard()
+    .text('Start Auto', 'auto:on')
+    .text('Run Cycle', 'auto:cycle');
+}
