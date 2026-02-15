@@ -3,7 +3,7 @@
 **Autonomous Privacy-First DeFi Agent for Solana**
 
 
-[![Solana](https://img.shields.io/badge/Solana-Native-14F195?style=flat-square)](https://solana.com)
+[![Twitter](https://img.shields.io/badge/Solana-Native-14F195?style=flat-square)](https://x.com/MakoraSolana)
 [![ZK Privacy](https://img.shields.io/badge/ZK-Groth16-orange?style=flat-square)](https://en.wikipedia.org/wiki/Zero-knowledge_proof)
 [![Arcium MPC](https://img.shields.io/badge/Arcium-MPC-8b5cf6?style=flat-square)](https://arcium.com)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
@@ -215,7 +215,7 @@ The risk manager has **absolute VETO power** over every action:
 
 ```bash
 # Clone
-git clone https://github.com/isSlashy/makora.git
+git clone https://github.com/FluffyZk/makora.git
 cd makora
 
 # Install
